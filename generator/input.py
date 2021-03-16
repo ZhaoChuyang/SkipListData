@@ -2,7 +2,7 @@ import os
 import sys
 import random
 
-from config import Config
+from src.utils.config import Config
 
 
 MAX_INT = 10000
@@ -23,7 +23,10 @@ def generate_input(cfg, fb):
     fb.write(line)
     op_num -= 1
 
-    skiplist = [random.randint(MIN_INT, MAX_INT) for i in range(cfg.init_size)]
+    if cfg.allow_duplicate:
+        skiplist = [random.randint(MIN_INT, MAX_INT) for i in range(cfg.init_size)]
+    else:
+        skiplist = random.sample(range(cfg.init_size + 10000), cfg.init_size)
     line = " ".join([str(e) for e in skiplist]) + "\n"
     fb.write(line)
 
@@ -40,6 +43,9 @@ def generate_input(cfg, fb):
             fb.write(line)
         if op == 2:
             num = random.randint(MIN_INT, MAX_INT)
+            if not cfg.allow_duplicate:
+                while num in skiplist:
+                    num = random.randint(MIN_INT, MAX_INT)
             line = "%d %d\n" % (op, num)
             fb.write(line)
             skiplist.append(num)
@@ -70,7 +76,7 @@ def generate_input(cfg, fb):
 
 
 def main():
-    cfg = Config.fromfile('./skiplist.py')
+    cfg = Config.fromfile('conf/skiplist.py')
     random.seed(cfg.SEED)
     
     if not os.path.isdir(cfg.save_path):
