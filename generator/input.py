@@ -2,7 +2,7 @@ import os
 import sys
 import random
 
-from src.utils.config import Config
+from config import Config
 
 
 MAX_INT = 10000
