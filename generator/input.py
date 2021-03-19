@@ -76,7 +76,7 @@ def generate_input(cfg, fb):
 
 
 def main():
-    cfg = Config.fromfile('conf/skiplist.py')
+    cfg = Config.fromfile('skiplist.py')
     random.seed(cfg.SEED)
     
     if not os.path.isdir(cfg.save_path):
